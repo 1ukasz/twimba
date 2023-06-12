@@ -7,6 +7,24 @@ tweetBtn.addEventListener("click", function () {
   tweetInput.value = "";
 });
 
+document.addEventListener("click", (e) => {
+  if (e.target.dataset.like) handleLikeclick(e.target.dataset.like);
+});
+
+function handleLikeclick(tweetId) {
+  const targetTweetObj = tweetsData.filter((tweet) => {
+    return tweet.uuid === tweetId;
+  })[0];
+  if (!targetTweetObj.isLiked) {
+    targetTweetObj.likes++;
+    targetTweetObj.isLiked = true;
+  } else if (targetTweetObj.isLiked) {
+    targetTweetObj.likes--;
+    targetTweetObj.isLiked = false;
+  }
+  render();
+}
+
 function getFeedHtml() {
   let feedHtml = "";
   tweetsData.forEach((tweet) => {
@@ -18,15 +36,15 @@ function getFeedHtml() {
                 <p class="tweet-text">${tweet.tweetText}</p>
                 <div class="tweet-details">
                     <span class="tweet-detail">
-                    <i class="fa-regular fa-comment-dots"></i>
+                    <i class="fa-regular fa-comment-dots" data-reply="${tweet.uuid}"></i>
                         ${tweet.replies.length}
                     </span>
                     <span class="tweet-detail">
-                    <i class="fa-solid fa-heart"></i>
+                    <i class="fa-solid fa-heart" data-like="${tweet.uuid}"></i>
                         ${tweet.likes}
                     </span>
                     <span class="tweet-detail">
-                    <i class="fa-solid fa-retweet"></i>
+                    <i class="fa-solid fa-retweet" data-retweet="${tweet.uuid}"></i>
                         ${tweet.retweets}
                     </span>
                 </div>   
